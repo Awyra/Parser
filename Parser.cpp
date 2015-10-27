@@ -25,7 +25,7 @@ class parser {
     map<string, double> vars;
     
     int new_var( string s ){                                            //инит переменных
-        if( index_var >= 1000 ){
+        if( index_var >= NUMVARS ){
             serror(NOT_FOUND);
         }
         var[index_var] = s;
@@ -33,7 +33,7 @@ class parser {
     }
     
     void set_var( string s, double a ){                                 //переинициализация переменных
-        for( int i=0; i<1000; i++ )
+        for( int i=0; i<NUMVARS; i++ )
             if( var[i] == s ){
                 num[i] = a;
                 return;
@@ -43,7 +43,7 @@ class parser {
     }
     
     double pop_var( string s ){                                         //достать значение из переменной
-        for( int i=0; i<1000; i++ )
+        for( int i=0; i<NUMVARS; i++ )
             if( var[i] == s ){
                 return num[i];
             }
@@ -414,9 +414,9 @@ int main(int argc, char** argv) {
         if((*expstr == '.')){
             break;
         }
-        otvet=ob.eval_exp(expstr);
+        res=ob.eval_exp(expstr);
         if(!ob.wat_error()){
-            cout << "#=>" << otvet << endl;
+            cout << "#=>" << res << endl;
         }
     }
     return 0;
