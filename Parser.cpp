@@ -25,7 +25,7 @@ class parser {
     int index_var=0;
     map<string, double> vars;
     
-    int new_var( string s ){                                            //инит переменных
+    int new_var( string s ){                                   
         if( index_var >= NUMVARS ){
             serror(NOT_FOUND);
         }
@@ -33,7 +33,7 @@ class parser {
         return index_var++;
     }
     
-    void set_var( string s, double a ){                                 //переинициализация переменных
+    void set_var( string s, double a ){                            
         for( int i=0; i<NUMVARS; i++ )
             if( var[i] == s ){
                 num[i] = a;
@@ -43,7 +43,7 @@ class parser {
         return;
     }
     
-    double pop_var( string s ){                                         //достать значение из переменной
+    double pop_var( string s ){                                   
         for( int i=0; i<NUMVARS; i++ )
             if( var[i] == s ){
                 return num[i];
@@ -138,24 +138,24 @@ class parser {
         }
     }
 
-    void eval_exp1(double &result){                             //принимает ссылку на переменную и инитит её ответом выражения
+    void eval_exp1(double &result){                           
         string slot;
         char  ttok_type;
         char temp_token[80];
         
-        if(tok_type == VARIABLE){                                       //если данный токен - переменная
-            strcpy(temp_token, token);                                  //сохраняем в левой переменной значение переменной token
-            ttok_type = tok_type;                                           //инитим тип токена
-            slot = token;                                                   //инитм строку slot адрессом токена
-            get_token();                                                //считываем следующий токен
+        if(tok_type == VARIABLE){                                       
+            strcpy(temp_token, token);                               
+            ttok_type = tok_type;                                         
+            slot = token;                                              
+            get_token();                                               
             register char left = *token;
-            if(*token != '='){                                              //если текущий токен не равно
+            if(*token != '='){                                       
                 if((*(token+1) == '=') && (strchr("+-*/%^", *token))){
-                    get_token();                                                    //считываем следующий токен
-                    eval_exp1(result);                                              //сохраняем в переменную result значение текущего выражения(рекурсия)
-                    //vars.insert(pair<string, double>(slot, result));              //приравниваем значение считанному имени переменной результат текущего выражения
+                    get_token();                                                   
+                    eval_exp1(result);                                              
+                    //vars.insert(pair<string, double>(slot, result));             
                     //cout<<"\n\n----\n"<<find_var(slot.c_str())<<result<<"\n";
-                    //cout<<"\n-\nleft-"<< left<<"\n";                              //если была найдена переменная то возвращаем её значение
+                    //cout<<"\n-\nleft-"<< left<<"\n";                             
                     char* l = (char*)slot.c_str();//---------------------
                     switch((char)left){
                         case '+':
@@ -187,33 +187,33 @@ class parser {
                             set_var( slot, result );
                         break;
                     }
-                    map<string, double>::iterator p;                    //инитим итератор
-                    p = vars.find((char*)slot.c_str());                 //находим имя переменной в подобии БД и сохраняем адрес в итераторе p//---------------------
+                    map<string, double>::iterator p;                  
+                    p = vars.find((char*)slot.c_str());               
                     if(p != vars.end()){
-                        cout<<"\n-\n"<< p->second<<"\n";    //если была найдена переменная то возвращаем её значение
+                        cout<<"\n-\n"<< p->second<<"\n"; 
                     }
-                    return;                                             //возврат
+                    return;                              
                 }else{
-                    putback();                                  //возврат к предвидущему токену
-                    strcpy(token, temp_token);                  //востанавливаем значение переменной token 
-                    tok_type = ttok_type;                           //востанавливаем значение типа токена
+                    putback();                           
+                    strcpy(token, temp_token);           
+                    tok_type = ttok_type;                
                 }
-            }else{                                      //в противном случае
+            }else{                                     
                 cout<<"!=\n";
-                get_token();                                //считываем следующий токен
-                eval_exp1(result);                          //сохраняем в переменную result значение текущего выражения(рекурсия)
-                set_var( slot, result );                    //приравниваем значение считанному имени переменной результат текущего выражения
-                return;                                     //возврат
+                get_token();                           
+                eval_exp1(result);                     
+                set_var( slot, result );               
+                return;                                
             }
         }
-        eval_exp_4(result);                         //записываем в переменную result значение выражения
+        eval_exp_4(result);                      
     }
     
-    void putback(){                             //возвращает ссылку на предвидущий токен
-        char *t;                                    //инитим ссылку t
-        t = token;                                  //инитим ссылку t адресом текущего токена
+    void putback(){                            
+        char *t;                               
+        t = token;                             
         for(;*t;t++){
-            exp_ptr--;                                  //проходим по всем символам текущего токена паралельно возврат назад по символам лексемы
+            exp_ptr--;                         
         }
     }
 
@@ -308,18 +308,18 @@ class parser {
         }
     }
 
-    void atom(double &result){                  //принимает ссылку на переменную хранящую ответ выражения и сохраняет значение токена в эту переменную
-        switch(tok_type){                           //проверяем тип считанного токена
-            case NUMBER:                                //если число
-                result = atof(token);                           //инициализирует переменную result значением token перведённое в числовой аналог
-                get_token();                                //считываем следующий токен
-                return;                                     //возврат
-            case VARIABLE:                              //если переменная
-                result = pop_var((string)token);                //инициализирует переменную result значением переменной с именем token
-                get_token();                                //считываем следующий токен
-                return;                                     //возврат
-            default:                                    //в противном случае
-                serror(SYNTAX);                                 //вывод ошибки
+    void atom(double &result){                 
+        switch(tok_type){                      
+            case NUMBER:                       
+                result = atof(token);          
+                get_token();                   
+                return;                        
+            case VARIABLE:                     
+                result = pop_var((string)token);
+                get_token();                    
+                return;                         
+            default:                            
+                serror(SYNTAX);                 
         }
     }
 
@@ -342,7 +342,7 @@ class parser {
                 (*exp_ptr == '&')||
                 (*exp_ptr == '|'))&&
                 ((*(exp_ptr-1)    != '(')||
-                    (*(exp_ptr-1) != ')'))){                 // аля-lisp
+                    (*(exp_ptr-1) != ')'))){    
                 *temp++ = *exp_ptr++;
             }
         }else if((isalpha(*exp_ptr))||(*exp_ptr == '_')){
@@ -362,45 +362,45 @@ class parser {
         *temp = '\0';
     }
 
-    void serror(int error){             //вызывается при ошбке
-        f_error = true;                     //присваиваем флагу ошибки true
-        static char *e[]={                  //инитим массив ошибок
+    void serror(int error){         
+        f_error = true;             
+        static char *e[]={          
             "Syntax error",
             "Imbalance brackets",
             "Empty expression",
             "Variable not found"
         };
-        cout << e[error] << endl;               //вывод ошибки
+        cout << e[error] << endl;   
     }
 
-    int isdelim(char c){                //если есть знаки пунктуации то возвращает true
+    int isdelim(char c){            
         return (strchr(" +-/*%^=()", c) || c==9 || c=='\r' || c==0 ? 1 : 0 );
     }
 
     
 public:
-    parser(){                           //конструктор инитит класс
-        exp_ptr=NULL;                       //приравниваниваем нулю переменную в которую класс сохраняет выражение 
+    parser(){                       
+        exp_ptr=NULL;               
     }
 
-    double eval_exp(char *exp){         //начало синтаксичекого анализа получает выражение и возвращает его значение, инитится флаг ошибок false
-        f_error = false;                        //при каждом использовании синтаксического анализа флаг ошибок инитится false
+    double eval_exp(char *exp){     
+        f_error = false;            
     
-        double result;                      //инитим переменную result в которй сохраним ответ выражения
-        exp_ptr = exp;                      //сохраняем переданное выражение в переменную каласса
-        get_token();                        //считываем токен
-        if(!*token){                        //если введено пустое выражение
-            serror(EMPTY_EXPRESSION);                           //вывод выражение пусто
-            return 0.0;                         //как ответ выводим 0
+        double result;              
+        exp_ptr = exp;              
+        get_token();                
+        if(!*token){                
+            serror(EMPTY_EXPRESSION);
+            return 0.0;              
         }
-        eval_exp1(result);                  //сохраняем ответ выражения в переменной result
+        eval_exp1(result);           
         if(*token){
-            serror(SYNTAX);             //если что-то осталось после анализа
+            serror(SYNTAX);          
         }
-        return result;                      //возвращаем переменную result в которой содержится ответ выражения
+        return result;               
     }
 
-    bool wat_error(){                       //возвращает флаг ошибки
+    bool wat_error(){                
         return f_error;
     }
 };
