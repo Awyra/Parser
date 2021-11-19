@@ -24,16 +24,16 @@ class parser {
     string var[NUMVARS];
     int index_var=0;
     map<string, double> vars;
-    
-    int new_var( string s ){                                   
+
+    int new_var( string s ){
         if( index_var >= NUMVARS ){
             serror(NOT_FOUND);
         }
         var[index_var] = s;
         return index_var++;
     }
-    
-    void set_var( string s, double a ){                            
+
+    void set_var( string s, double a ){
         for( int i=0; i<NUMVARS; i++ )
             if( var[i] == s ){
                 num[i] = a;
@@ -42,20 +42,20 @@ class parser {
         num[new_var(s)] = a;
         return;
     }
-    
-    double pop_var( string s ){                                   
+
+    double pop_var( string s ){
         for( int i=0; i<NUMVARS; i++ )
             if( var[i] == s ){
                 return num[i];
             }
         return 0;
     }
-    
+
     void eval_exp_4(double &result){
         register char op;
         string t;
         double temp;
-        
+
         eval_exp_3(result);
         while((op=*token) == '|'){
             t = token;
@@ -73,7 +73,7 @@ class parser {
         register char op;
         string t;
         double temp;
-        
+
         eval_exp_2(result);
         while((op=*token) == '&'){
             t = token;
@@ -91,7 +91,7 @@ class parser {
         register char op;
         string t;
         double temp;
-        
+
         eval_exp_1(result);
         while((op=*token) == '=' || op == '!'){
             t = token;
@@ -111,51 +111,51 @@ class parser {
         register char op;
         string t;
         double temp;
-        
+
         eval_exp2(result);
         while((op=*token) == '>' || op == '<'){
             t = token;
             get_token();
             eval_exp2(temp);
             switch(op){
-                case '>': 
+                case '>':
                     if(t == ">="){
                         result = (result>=temp?1:0);
-                    }else{ 
+                    }else{
                         result = (result>temp?1:0);
                     }
                 break;
-                case '<': 
+                case '<':
                     if(t == "<="){
                         result = (result<=temp?1:0);
                     }else{
                         result = (result<temp?1:0);
                     }
                 break;
-                default: 
+                default:
                     serror(SYNTAX);
             }
         }
     }
 
-    void eval_exp1(double &result){                           
+    void eval_exp1(double &result){
         string slot;
         char  ttok_type;
         char temp_token[80];
-        
-        if(tok_type == VARIABLE){                                       
-            strcpy(temp_token, token);                               
-            ttok_type = tok_type;                                         
-            slot = token;                                              
-            get_token();                                               
+
+        if(tok_type == VARIABLE){
+            strcpy(temp_token, token);
+            ttok_type = tok_type;
+            slot = token;
+            get_token();
             register char left = *token;
-            if(*token != '='){                                       
+            if(*token != '='){
                 if((*(token+1) == '=') && (strchr("+-*/%^", *token))){
-                    get_token();                                                   
-                    eval_exp1(result);                                              
-                    //vars.insert(pair<string, double>(slot, result));             
+                    get_token();
+                    eval_exp1(result);
+                    //vars.insert(pair<string, double>(slot, result));
                     //cout<<"\n\n----\n"<<find_var(slot.c_str())<<result<<"\n";
-                    //cout<<"\n-\nleft-"<< left<<"\n";                             
+                    //cout<<"\n-\nleft-"<< left<<"\n";
                     char* l = (char*)slot.c_str();//---------------------
                     switch((char)left){
                         case '+':
@@ -172,7 +172,7 @@ class parser {
                         break;
                         case '/':
                             result = pop_var(slot) / result;
-                            set_var( slot, result ); 
+                            set_var( slot, result );
                         break;
                         case '%':
                             result = (double)( (int)pop_var(slot) % (int)result );
@@ -187,45 +187,45 @@ class parser {
                             set_var( slot, result );
                         break;
                     }
-                    map<string, double>::iterator p;                  
-                    p = vars.find((char*)slot.c_str());               
+                    map<string, double>::iterator p;
+                    p = vars.find((char*)slot.c_str());
                     if(p != vars.end()){
-                        cout<<"\n-\n"<< p->second<<"\n"; 
+                        cout<<"\n-\n"<< p->second<<"\n";
                     }
-                    return;                              
+                    return;
                 }else{
-                    putback();                           
-                    strcpy(token, temp_token);           
-                    tok_type = ttok_type;                
+                    putback();
+                    strcpy(token, temp_token);
+                    tok_type = ttok_type;
                 }
-            }else{                                     
+            }else{
                 cout<<"!=\n";
-                get_token();                           
-                eval_exp1(result);                     
-                set_var( slot, result );               
-                return;                                
+                get_token();
+                eval_exp1(result);
+                set_var( slot, result );
+                return;
             }
         }
-        eval_exp_4(result);                      
+        eval_exp_4(result);
     }
-    
-    void putback(){                            
-        char *t;                               
-        t = token;                             
+
+    void putback(){
+        char *t;
+        t = token;
         for(;*t;t++){
-            exp_ptr--;                         
+            exp_ptr--;
         }
     }
 
     void eval_exp2(double &result){
         register char op;
         double temp;
-        
+
         eval_exp3(result);
         while((op=*token) == '+' || op == '-'){
             get_token();
             eval_exp3(temp);
-            
+
             switch(op){
                 case '-':
                     result = result-temp;
@@ -242,7 +242,7 @@ class parser {
     void eval_exp3(double &result){
         register char op;
         double temp;
-        
+
         eval_exp4(result);
         while((op=*token) == '*' || op == '/' || op == '%'){
             get_token();
@@ -264,7 +264,7 @@ class parser {
     void eval_exp4(double &result){
         double temp, ex;
         register int t;
-        
+
         eval_exp5(result);
         if(*token == '^'){
             get_token();
@@ -308,18 +308,18 @@ class parser {
         }
     }
 
-    void atom(double &result){                 
-        switch(tok_type){                      
-            case NUMBER:                       
-                result = atof(token);          
-                get_token();                   
-                return;                        
-            case VARIABLE:                     
+    void atom(double &result){
+        switch(tok_type){
+            case NUMBER:
+                result = atof(token);
+                get_token();
+                return;
+            case VARIABLE:
                 result = pop_var((string)token);
-                get_token();                    
-                return;                         
-            default:                            
-                serror(SYNTAX);                 
+                get_token();
+                return;
+            default:
+                serror(SYNTAX);
         }
     }
 
@@ -328,7 +328,7 @@ class parser {
         tok_type = 0;
         temp=token;
         *temp = '\0';
-        
+
         if(!*exp_ptr){
             return;
         }
@@ -342,7 +342,7 @@ class parser {
                 (*exp_ptr == '&')||
                 (*exp_ptr == '|'))&&
                 ((*(exp_ptr-1)    != '(')||
-                    (*(exp_ptr-1) != ')'))){    
+                    (*(exp_ptr-1) != ')'))){
                 *temp++ = *exp_ptr++;
             }
         }else if((isalpha(*exp_ptr))||(*exp_ptr == '_')){
@@ -362,51 +362,51 @@ class parser {
         *temp = '\0';
     }
 
-    void serror(int error){         
-        f_error = true;             
-        static char *e[]={          
+    void serror(int error){
+        f_error = true;
+        static char *e[]={
             "Syntax error",
             "Imbalance brackets",
             "Empty expression",
             "Variable not found"
         };
-        cout << e[error] << endl;   
+        cout << e[error] << endl;
     }
 
-    int isdelim(char c){            
+    int isdelim(char c){
         return (strchr(" +-/*%^=()", c) || c==9 || c=='\r' || c==0 ? 1 : 0 );
     }
 
-    
+
 public:
-    parser(){                       
-        exp_ptr=NULL;               
+    parser(){
+        exp_ptr=NULL;
     }
 
-    double eval_exp(char *exp){     
-        f_error = false;            
-    
-        double result;              
-        exp_ptr = exp;              
-        get_token();                
-        if(!*token){                
+    double eval_exp(char *exp){
+        f_error = false;
+
+        double result;
+        exp_ptr = exp;
+        get_token();
+        if(!*token){
             serror(EMPTY_EXPRESSION);
-            return 0.0;              
+            return 0.0;
         }
-        eval_exp1(result);           
+        eval_exp1(result);
         if(*token){
-            serror(SYNTAX);          
+            serror(SYNTAX);
         }
-        return result;               
+        return result;
     }
 
-    bool wat_error(){                
+    bool wat_error(){
         return f_error;
     }
 };
 
 int main(int argc, char** argv) {
-    double otvet;
+    double res;
     char expstr[80];
     cout<<"If u need to exit press '.'\n";
     parser ob;
