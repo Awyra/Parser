@@ -1,7 +1,7 @@
 # Simple Parser In C++
 ## Supported operators (sorted in descending order of calculation priority)
 <p>
-()            | change priority <br>
+()            <p text-align="right">| change priority</p><br>
 !, -, +       | unary<br>
 ^             | exponentiation<br>
 *, /, %       | multiply, division, remainder<br>
@@ -11,7 +11,7 @@
 &&            | and<br>
 ||            | or<br>
 =, +=, -=, %= | assignment<br>
-\*=, /=, ^=   | ^^<br>
+\*=, /=, ^= &nbsp;&nbsp;| ^^<br>
 <br>
 <img src="example.png">
 </p>
