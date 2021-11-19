@@ -63,7 +63,7 @@ class parser {
             get_token();
             eval_exp_3(temp);
             if(t == "||") {
-                result = (result || temp);
+                result = result || temp;
             }
             else {
                 serror(SYNTAX);
@@ -82,7 +82,7 @@ class parser {
             get_token();
             eval_exp_2(temp);
             if(t == "&&") {
-                result = (result && temp);
+                result = result && temp;
             }
             else {
                 serror(SYNTAX);
@@ -101,9 +101,9 @@ class parser {
             get_token();
             eval_exp_1(temp);
             if(t == "==") {
-                result = (result == temp ? 1 : 0);
+                result = result == temp;
             }else if(t == "!=") {
-                result = (result != temp ? 1 : 0);
+                result = result != temp;
             }
             else {
                 serror(SYNTAX);
@@ -124,18 +124,18 @@ class parser {
             switch(op) {
                 case '>':
                     if(t == ">=") {
-                        result = (result >= temp ? 1 : 0);
+                        result = result >= temp;
                     }
                     else {
-                        result = (result > temp ? 1 : 0);
+                        result = result > temp;
                     }
                 break;
                 case '<':
                     if(t == "<=") {
-                        result = (result <= temp ? 1 : 0);
+                        result = result <= temp;
                     }
                     else {
-                        result = (result < temp ? 1 : 0);
+                        result = result < temp;
                     }
                 break;
                 default:
@@ -236,7 +236,7 @@ class parser {
 
             switch(op){
                 case '-':
-                    result = result - temp;
+                    result -= temp;
                 break;
                 case '+':
                     result += temp;
@@ -300,7 +300,7 @@ class parser {
             result = (-result);
         }
         else if(op == '!') {
-            result = (result == 0 ? 1 : 0);
+            result = result == 0;
         }
     }
 
@@ -386,7 +386,7 @@ class parser {
     }
 
     int isdelim(char c) {
-        return (strchr(" +-/*%^=()", c) || c==9 || c=='\r' || c==0 ? 1 : 0 );
+        return (strchr(" +-/*%^=()", c) || c==9 || c=='\r' || c==0 );
     }
 
 
