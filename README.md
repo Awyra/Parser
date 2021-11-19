@@ -1,5 +1,6 @@
 # Simple Parser In C++
 ## Supported operators (sorted in descending order of calculation priority)
+<p>
 ()            | change priority
 !, -, +       | unary
 ^             | exponentiation
@@ -11,6 +12,7 @@
 ||            | or
 =, +=, -=, %= | assignment
 \*=, /=, ^=   | ^^
-
+</p>
+![Alt-text](example.png "Example")
 
 
