@@ -52,16 +52,16 @@ class parser {
         return 0;
     }
 
-    void eval_exp_4(double &result) {
+    void calc_or(double &result) {
         register char op;
         string t;
         double temp;
 
-        eval_exp_3(result);
+        calc_and(result);
         while((op=*token) == '|') {
             t = token;
             get_token();
-            eval_exp_3(temp);
+            calc_and(temp);
             if(t == "||") {
                 result = result || temp;
             }
@@ -71,16 +71,16 @@ class parser {
         }
     }
 
-    void eval_exp_3(double &result) {
+    void calc_and(double &result) {
         register char op;
         string t;
         double temp;
 
-        eval_exp_2(result);
+        calc_eq(result);
         while((op=*token) == '&') {
             t = token;
             get_token();
-            eval_exp_2(temp);
+            calc_eq(temp);
             if(t == "&&") {
                 result = result && temp;
             }
@@ -90,16 +90,16 @@ class parser {
         }
     }
 
-    void eval_exp_2(double &result) {
+    void calc_eq(double &result) {
         register char op;
         string t;
         double temp;
 
-        eval_exp_1(result);
+        calc_logic(result);
         while((op=*token) == '=' || op == '!') {
             t = token;
             get_token();
-            eval_exp_1(temp);
+            calc_logic(temp);
             if(t == "==") {
                 result = result == temp;
             }else if(t == "!=") {
@@ -111,16 +111,16 @@ class parser {
         }
     }
 
-    void eval_exp_1(double &result) {
+    void calc_logic(double &result) {
         register char op;
         string t;
         double temp;
 
-        eval_exp2(result);
+        calc_add(result);
         while((op=*token) == '>' || op == '<') {
             t = token;
             get_token();
-            eval_exp2(temp);
+            calc_add(temp);
             switch(op) {
                 case '>':
                     if(t == ">=") {
@@ -144,7 +144,7 @@ class parser {
         }
     }
 
-    void eval_exp1(double &result) {
+    void calc_expr(double &result) {
         string slot;
         char  ttok_type;
         char temp_token[80];
@@ -158,7 +158,7 @@ class parser {
             if(*token != '=') {
                 if(*(token+1) == '=' && strchr("+-*/%^", *token)) {
                     get_token();
-                    eval_exp1(result);
+                    calc_expr(result);
                     //vars.insert(pair<string, double>(slot, result));
                     //cout << "\n\n----\n" << find_var(slot.c_str()) << result << "\n";
                     //cout << "\n-\nleft-" << left << "\n";
@@ -209,12 +209,12 @@ class parser {
             else {
                 cout << "!=\n";
                 get_token();
-                eval_exp1(result);
+                calc_expr(result);
                 set_var(slot, result);
                 return;
             }
         }
-        eval_exp_4(result);
+        calc_or(result);
     }
 
     void putback() {
@@ -225,14 +225,14 @@ class parser {
         }
     }
 
-    void eval_exp2(double &result) {
+    void calc_add(double &result) {
         register char op;
         double temp;
 
-        eval_exp3(result);
+        calc_mul(result);
         while((op=*token) == '+' || op == '-') {
             get_token();
-            eval_exp3(temp);
+            calc_mul(temp);
 
             switch(op){
                 case '-':
@@ -247,14 +247,14 @@ class parser {
         }
     }
 
-    void eval_exp3(double &result) {
+    void calc_mul(double &result) {
         register char op;
         double temp;
 
-        eval_exp4(result);
+        calc_phasing(result);
         while((op=*token) == '*' || op == '/' || op == '%') {
             get_token();
-            eval_exp4(temp);
+            calc_phasing(temp);
             switch(op) {
                 case '*':
                     result *= temp;
@@ -269,14 +269,14 @@ class parser {
         }
     }
 
-    void eval_exp4(double &result) {
+    void calc_phasing(double &result) {
         double temp, ex;
         register int t;
 
-        eval_exp5(result);
+        calc_unary(result);
         if(*token == '^') {
             get_token();
-            eval_exp4(temp);
+            calc_phasing(temp);
             ex = result;
             if(temp == 0.0) {
                 result = 1.0;
@@ -288,14 +288,14 @@ class parser {
         }
     }
 
-    void eval_exp5(double &result) {
+    void calc_unary(double &result) {
         register char op;
         op = 0;
         if(tok_type == DELIMITER && *token == '+' || *token == '-' || *token == '!') {
             op = *token;
             get_token();
         }
-        eval_exp6(result);
+        calc_change_priority(result);
         if(op == '-') {
             result = (-result);
         }
@@ -304,21 +304,21 @@ class parser {
         }
     }
 
-    void eval_exp6(double &result) {
+    void calc_change_priority(double &result) {
         if(*token == '(') {
             get_token();
-            eval_exp2(result);
+            calc_add(result);
             if(*token != ')') {
                 serror(BRACKETS);
             }
             get_token();
         }
         else{
-            atom(result);
+            calc_atom(result);
         }
     }
 
-    void atom(double &result) {
+    void calc_atom(double &result) {
         switch(tok_type) {
             case NUMBER:
                 result = atof(token);
@@ -395,7 +395,7 @@ public:
         exp_ptr = NULL;
     }
 
-    double eval_exp(char *exp) {
+    double init(char *exp) {
         f_error = false;
 
         double result;
@@ -405,7 +405,7 @@ public:
             serror(EMPTY_EXPRESSION);
             return 0.0;
         }
-        eval_exp1(result);
+        calc_expr(result);
         if(*token) {
             serror(SYNTAX);
         }
@@ -427,7 +427,7 @@ int main (int argc, char** argv) {
         if(*expstr == '.') {
             break;
         }
-        res = ob.eval_exp(expstr);
+        res = ob.init(expstr);
         if(!ob.wat_error()) {
             cout << "#=>" << res << endl;
         }
