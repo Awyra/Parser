@@ -251,10 +251,10 @@ class parser {
         register char op;
         double temp;
 
-        calc_phasing(result);
+        calc_pow(result);
         while((op=*token) == '*' || op == '/' || op == '%') {
             get_token();
-            calc_phasing(temp);
+            calc_pow(temp);
             switch(op) {
                 case '*':
                     result *= temp;
@@ -269,14 +269,14 @@ class parser {
         }
     }
 
-    void calc_phasing(double &result) {
+    void calc_pow(double &result) {
         double temp, ex;
         register int t;
 
         calc_unary(result);
         if(*token == '^') {
             get_token();
-            calc_phasing(temp);
+            calc_pow(temp);
             ex = result;
             if(temp == 0.0) {
                 result = 1.0;
