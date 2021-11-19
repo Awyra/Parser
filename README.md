@@ -12,7 +12,8 @@
 ||            | or<br>
 =, +=, -=, %= | assignment<br>
 \*=, /=, ^=   | ^^<br>
+<br>
+<img src="example.png">
 </p>
-![Alt-text](./example.png "Example")
 
 
