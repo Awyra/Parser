@@ -1,18 +1,18 @@
 # Simple Parser In C++
 ## Supported operators (sorted in descending order of calculation priority)
 <p>
-()            | change priority
-!, -, +       | unary
-^             | exponentiation
-*, /, %       | multiply, division, remainder
-+, -          | addition, subtracting
-\>, >=, <, <= | logical expressions
-==, !=        | equal, unequal
-&&            | and
-||            | or
-=, +=, -=, %= | assignment
-\*=, /=, ^=   | ^^
+()            | change priority <br>
+!, -, +       | unary<br>
+^             | exponentiation<br>
+*, /, %       | multiply, division, remainder<br>
++, -          | addition, subtracting<br>
+\>, >=, <, <= | logical expressions<br>
+==, !=        | equal, unequal<br>
+&&            | and<br>
+||            | or<br>
+=, +=, -=, %= | assignment<br>
+\*=, /=, ^=   | ^^<br>
 </p>
-![Alt-text](example.png "Example")
+![Alt-text](./example.png "Example")
 
 
