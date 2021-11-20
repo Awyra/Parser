@@ -11,8 +11,7 @@
 |==, != | equal, unequal|
 |&& | and|
 |&#124;&#124; | or|
-|=, +=, -=, %= | assignment|
-|\*=, /=, ^= | ^^|
+|=, +=, -=, %=, \*=, /=, ^= | assignment|
 <br>
 <img src="example.png">
 
