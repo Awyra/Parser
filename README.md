@@ -1,6 +1,7 @@
 # Simple Parser In C++
 ## Supported operators (sorted in descending order of calculation priority)
 |Operator|Short Description|
+|:-----|:-----|
 |() | change priority|
 |!, -, + | unary|
 |^ | exponentiation|
