@@ -1,19 +1,19 @@
 # Simple Parser In C++
 ## Supported operators (sorted in descending order of calculation priority)
-<p>
-()            <p text-align="right">| change priority</p><br>
-!, -, +       | unary<br>
-^             | exponentiation<br>
-*, /, %       | multiply, division, remainder<br>
-+, -          | addition, subtracting<br>
-\>, >=, <, <= | logical expressions<br>
-==, !=        | equal, unequal<br>
-&&            | and<br>
-||            | or<br>
-=, +=, -=, %= | assignment<br>
-\*=, /=, ^= &nbsp;&nbsp;| ^^<br>
+|Operator|Short Description|
+|() | change priority|
+|!, -, + | unary|
+|^ | exponentiation|
+|*, /, % | multiply, division, remainder|
+|+, - | addition, subtracting|
+|\>, >=, <, <= | logical expressions|
+|==, != | equal, unequal|
+|&& | and|
+|&#124;&#124; | or|
+|=, +=, -=, %= | assignment|
+|\*=, /=, ^= | ^^|
 <br>
 <img src="example.png">
-</p>
+
 
 
